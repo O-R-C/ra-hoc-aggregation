@@ -1,6 +1,12 @@
 /* eslint-disable react/prop-types */
 
 import React from 'react'
+import { v4 as uuid } from 'uuid'
+import SortedData from './components/SortedData/SortedData'
+
+const WithYearSortedData = SortedData(YearTable)
+const WithMonthSortedData = SortedData(MonthTable)
+const WitSortedData = SortedData(SortTable)
 
 function YearTable(props) {
   console.log('YearTable', props)
@@ -9,16 +15,20 @@ function YearTable(props) {
     <div>
       <h2>Year Table</h2>
       <table>
-        <tr>
-          <th>Year</th>
-          <th>Amount</th>
-        </tr>
-        {props.list.map((item) => (
+        <thead>
           <tr>
-            <td>{item.year}</td>
-            <td>{item.amount}</td>
+            <th>Year</th>
+            <th>Amount</th>
           </tr>
-        ))}
+        </thead>
+        <tbody>
+          {props.list.map((item) => (
+            <tr key={uuid()}>
+              <td>{item.year}</td>
+              <td>{item.amount}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   )
@@ -31,16 +41,20 @@ function SortTable(props) {
     <div>
       <h2>Sort Table</h2>
       <table>
-        <tr>
-          <th>Date</th>
-          <th>Amount</th>
-        </tr>
-        {props.list.map((item) => (
+        <thead>
           <tr>
-            <td>{item.date}</td>
-            <td>{item.amount}</td>
+            <th>Date</th>
+            <th>Amount</th>
           </tr>
-        ))}
+        </thead>
+        <tbody>
+          {props.list.map((item) => (
+            <tr key={uuid()}>
+              <td>{item.date}</td>
+              <td>{item.amount}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   )
@@ -53,16 +67,20 @@ function MonthTable(props) {
     <div>
       <h2>Month Table</h2>
       <table>
-        <tr>
-          <th>Month</th>
-          <th>Amount</th>
-        </tr>
-        {props.list.map((item) => (
+        <thead>
           <tr>
-            <td>{item.month}</td>
-            <td>{item.amount}</td>
+            <th>Month</th>
+            <th>Amount</th>
           </tr>
-        ))}
+        </thead>
+        <tbody>
+          {props.list.map((item) => (
+            <tr key={uuid()}>
+              <td>{item.month}</td>
+              <td>{item.amount}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   )
@@ -77,13 +95,25 @@ export default class App extends React.Component {
     list: [],
   }
 
+  componentDidMount() {
+    try {
+      fetch(import.meta.env.VITE_API_URL)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({ list: data.list })
+        })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   render() {
     const { list } = this.state
     return (
       <div id='app'>
-        <MonthTable list={list} />
-        <YearTable list={list} />
-        <SortTable list={list} />
+        <WithMonthSortedData list={list} />
+        <WithYearSortedData list={list} />
+        <WitSortedData list={list} />
       </div>
     )
   }
