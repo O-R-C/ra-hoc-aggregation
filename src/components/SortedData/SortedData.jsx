@@ -9,12 +9,13 @@ moment.locale('ru')
  * A higher-order component that sorts data based on the provided component type.
  *
  * @param {React.Component} Component - The component to wrap with sorted data.
+ * @param {string} name - The name of the component.
  * @return {React.Component} A new component with sorted data.
  */
-export default function SortedData(Component) {
+export default function SortedData(Component, name) {
   return function WithSortedData(props) {
     let list = null
-    switch (Component.name) {
+    switch (name) {
       case 'SortTable':
         list = sortByDate(props.list)
         break

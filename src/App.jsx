@@ -4,9 +4,9 @@ import React from 'react'
 import { v4 as uuid } from 'uuid'
 import SortedData from './components/SortedData/SortedData'
 
-const WithYearSortedData = SortedData(YearTable)
-const WithMonthSortedData = SortedData(MonthTable)
-const WitSortedData = SortedData(SortTable)
+const WithYearSortedData = SortedData(YearTable, 'YearTable')
+const WithMonthSortedData = SortedData(MonthTable, 'MonthTable')
+const WitSortedData = SortedData(SortTable, 'SortTable')
 
 function YearTable(props) {
   console.log('YearTable', props)
@@ -107,13 +107,15 @@ export default class App extends React.Component {
     }
   }
 
+  componentDidUpdate() {}
+
   render() {
     const { list } = this.state
     return (
       <div id='app'>
-        <WithMonthSortedData list={list} />
-        <WithYearSortedData list={list} />
-        <WitSortedData list={list} />
+        {list.length && <WithMonthSortedData list={list} />}
+        {list.length && <WithYearSortedData list={list} />}
+        {list.length && <WitSortedData list={list} />}
       </div>
     )
   }
